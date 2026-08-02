@@ -4,14 +4,20 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import math
 
+import os
+
 app = FastAPI(title="Aero-Nav Interactive Calculator")
 
+# Determine base path for serving files reliably
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
 # Serve frontend files
-app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 @app.get("/")
 async def root():
-    return FileResponse("../frontend/index.html")
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
 # Example calculation endpoint
 class WindTriangleRequest(BaseModel):
