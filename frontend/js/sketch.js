@@ -293,13 +293,21 @@ const sketch = (p) => {
     function drawLatLonGrid(p) {
         p.stroke(6, 182, 212, 30); // very faint cyan
         p.strokeWeight(1);
-        for(let x = 0; x < p.width; x += 50) {
+        
+        // Pan grid to give illusion of movement
+        let panX = 0; let panY = 0;
+        if (simData.active && (simData.mode === 'wind' || simData.mode === 'distance')) {
+            panX = -(simData.frame * 0.5) % 50;
+            panY = (simData.frame * 0.2) % 50;
+        }
+
+        for(let x = panX; x < p.width; x += 50) {
             p.line(x, 0, x, p.height);
             p.fill(6, 182, 212, 50); p.noStroke(); p.textSize(8); p.textAlign(p.LEFT, p.TOP);
             p.text(`115°${(x/50)+10}'W`, x + 2, 5);
             p.stroke(6, 182, 212, 30);
         }
-        for(let y = 0; y < p.height; y += 50) {
+        for(let y = panY; y < p.height; y += 50) {
             p.line(0, y, p.width, y);
             p.fill(6, 182, 212, 50); p.noStroke(); p.textSize(8); p.textAlign(p.LEFT, p.BOTTOM);
             p.text(`36°${(y/50)+20}'N`, 5, y - 2);
@@ -337,10 +345,38 @@ const sketch = (p) => {
     function drawNavAids(p) {
         p.push();
         // VORs
-        let vors = [
-            {x: 120, y: 200, name: "LAS"},
-            {x: 480, y: 150, name: "BTY"}
-        ];
+        let vors = [];
+        let apts = [];
+
+        // Make nav aids relative to the selected formula!
+        if (simData.mode === 'wind' && simData.active) {
+            // Put an airfield at the center and a VOR at the destination
+            apts.push({x: p.width/2, y: p.height/2, name: "ORIGIN", rwy: "14/32"});
+            
+            // Destination based on GS and Track
+            let maxVal = Math.max(simData.gs, simData.tas, 100);
+            let scaleFactor = 120 / maxVal; 
+            let destX = p.width/2 + p.cos(simData.tc - 90) * (simData.gs * scaleFactor);
+            let destY = p.height/2 + p.sin(simData.tc - 90) * (simData.gs * scaleFactor);
+            vors.push({x: destX, y: destY, name: "DEST"});
+        } else if (simData.mode === 'distance' && simData.active) {
+            // Point A and Point B
+            apts.push({x: p.width/2, y: p.height/2, name: "PT A", rwy: "09/27"});
+            let destX = p.width/2 + p.cos(simData.track - 90) * 120;
+            let destY = p.height/2 + p.sin(simData.track - 90) * 120;
+            apts.push({x: destX, y: destY, name: "PT B", rwy: "18/36"});
+        } else {
+            // Default generic map features
+            vors = [
+                {x: 120, y: 200, name: "LAS"},
+                {x: 480, y: 150, name: "BTY"}
+            ];
+            apts = [
+                {x: 250, y: 280, name: "KTNX", rwy: "14/32"},
+                {x: 400, y: 90,  name: "KLSV", rwy: "03/21"}
+            ];
+        }
+
         p.stroke(236, 72, 153, 150); // magenta
         p.strokeWeight(2);
         vors.forEach(v => {
@@ -352,11 +388,6 @@ const sketch = (p) => {
             p.stroke(236, 72, 153, 150);
         });
         
-        // Airfields
-        let apts = [
-            {x: 250, y: 280, name: "KTNX", rwy: "14/32"},
-            {x: 400, y: 90,  name: "KLSV", rwy: "03/21"}
-        ];
         p.stroke(6, 182, 212, 150); // cyan
         apts.forEach(a => {
             p.fill(6, 182, 212, 40);
