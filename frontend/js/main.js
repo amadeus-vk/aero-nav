@@ -1,5 +1,18 @@
 import { simData, initSketch } from './sketch.js';
 
+function renderFormulas(formulas) {
+    if (!formulas || !formulas.length) return '';
+    let html = '<div class="formula-block"><h4>Formulas Used:</h4>';
+    formulas.forEach(f => {
+        html += `<div class="formula-item">
+            <div class="formula-symbolic">${f.symbolic}</div>
+            <div class="formula-plugged">${f.plugged}</div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initSketch();
     
@@ -43,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>True Heading:</strong> ${data.true_heading.toFixed(2)}°</p>
                 <p><strong>Ground Speed:</strong> ${data.ground_speed.toFixed(2)} kts</p>
                 <p><strong>WCA:</strong> ${data.wind_correction_angle.toFixed(2)}°</p>
+                ${renderFormulas(data.formulas)}
             `;
             
             simData.tc = tc; simData.tas = tas; simData.wd = wd; simData.ws = ws;
@@ -71,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>True Heading:</strong> ${data.true_heading.toFixed(2)}°</p>
                 <p><strong>Magnetic Heading:</strong> ${data.magnetic_heading.toFixed(2)}°</p>
                 <p><strong>Compass Heading:</strong> ${data.compass_heading.toFixed(2)}°</p>
+                ${renderFormulas(data.formulas)}
             `;
             
             simData.th = th;
@@ -99,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('results').innerHTML = `
                 <p><strong>Distance:</strong> ${data.distance_nm.toFixed(2)} NM</p>
                 <p><strong>Initial True Track:</strong> ${data.true_track.toFixed(2)}°</p>
+                ${renderFormulas(data.formulas)}
             `;
             
             simData.dist = data.distance_nm;
@@ -130,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>Distance:</strong> ${data.distance.toFixed(2)} NM</p>
                 <p><strong>Speed:</strong> ${data.speed.toFixed(2)} kts</p>
                 <p><strong>Time:</strong> ${data.time_min.toFixed(2)} mins</p>
+                ${renderFormulas(data.formulas)}
             `;
             
             simData.dist = data.distance;
@@ -157,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>ISA Temp at Alt:</strong> ${data.isa_temp.toFixed(2)} °C</p>
                 <p><strong>ISA Deviation:</strong> ${data.isa_deviation.toFixed(2)} °C</p>
                 <p><strong>True Altitude:</strong> ${data.true_altitude.toFixed(0)} ft</p>
+                ${renderFormulas(data.formulas)}
             `;
             
             simData.alt = alt;
@@ -181,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.getElementById('results').innerHTML = `
                 <p><strong>Round Trip Time:</strong> ${data.round_trip_time_us.toFixed(2)} μs</p>
+                ${renderFormulas(data.formulas)}
             `;
             
             simData.dist = dist;
