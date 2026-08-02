@@ -20,4 +20,4 @@ Run via Docker Compose:
 docker-compose up --build
 ```
 
-Then visit `http://localhost:8000` in your web browser.
+Then visit `http://localhost:8085` in your web browser.
