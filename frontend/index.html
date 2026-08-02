@@ -4,147 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aero-Nav Interactive Calculator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="/static/css/style.css">
-    <!-- Include p5.js for animations, Leaflet for maps if needed -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Aero-Nav Interactive Calculator</h1>
-            <p>Playful, animated aviation mathematics</p>
-            <nav class="scenario-nav">
-                <button class="nav-btn active" data-target="wind">Wind Triangle</button>
-                <button class="nav-btn" data-target="compass">Compass & Heading</button>
-                <button class="nav-btn" data-target="distance">Distance & Track</button>
-                <button class="nav-btn" data-target="tsd">Time, Speed, Distance</button>
-                <button class="nav-btn" data-target="altitude">Altitude & Atmosphere</button>
-                <button class="nav-btn" data-target="radar">Primary Radar</button>
-            </nav>
-        </header>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 sticky top-0 z-50 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-plane-up text-slate-950 text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-xl tracking-wider font-mono text-white">AERONAV <span class="text-cyan-400">PRO</span></h1>
+                <p class="text-xs text-slate-400">Interactive Aviation Calculator & Flight Vector Simulator</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 p-6 flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto w-full">
+        <!-- Sidebar Navigation -->
+        <div class="w-full lg:w-64 flex-shrink-0 flex flex-col gap-2 scenario-nav">
+            <button class="nav-btn active flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-left transition" data-target="wind">
+                <i class="fa-solid fa-wind text-cyan-400 w-5"></i>
+                <span class="font-semibold text-sm">Wind Triangle</span>
+            </button>
+            <button class="nav-btn flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-left transition" data-target="compass">
+                <i class="fa-solid fa-compass text-amber-400 w-5"></i>
+                <span class="font-semibold text-sm">Compass Heading</span>
+            </button>
+            <button class="nav-btn flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-left transition" data-target="distance">
+                <i class="fa-solid fa-route text-emerald-400 w-5"></i>
+                <span class="font-semibold text-sm">Distance & Track</span>
+            </button>
+            <button class="nav-btn flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-left transition" data-target="tsd">
+                <i class="fa-solid fa-stopwatch text-pink-400 w-5"></i>
+                <span class="font-semibold text-sm">TSD Calculator</span>
+            </button>
+            <button class="nav-btn flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-left transition" data-target="altitude">
+                <i class="fa-solid fa-temperature-arrow-up text-blue-400 w-5"></i>
+                <span class="font-semibold text-sm">Atmosphere</span>
+            </button>
+            <button class="nav-btn flex items-center gap-3 p-3 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-left transition" data-target="radar">
+                <i class="fa-solid fa-satellite-dish text-green-400 w-5"></i>
+                <span class="font-semibold text-sm">Primary Radar</span>
+            </button>
+        </div>
         
-        <main class="dashboard">
-            <section class="calculator-panel">
+        <main class="flex-1 flex flex-col xl:flex-row gap-6">
+            <!-- Calculator Input Panel -->
+            <section class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
                 
                 <!-- Wind Triangle -->
-                <div id="wind-section" class="scenario-section active">
-                    <h2>Wind Triangle Calculator</h2>
-                    <form id="wind-form">
-                        <div class="input-group">
-                            <label for="tc">True Course (deg):</label>
-                            <input type="number" id="tc" value="90" required>
+                <div id="wind-section" class="scenario-section active flex-1">
+                    <h2 class="text-xl font-bold text-white mb-4 font-mono border-b border-slate-700 pb-2">WIND TRIANGLE CALCULATOR</h2>
+                    <form id="wind-form" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="input-group">
+                                <label for="tc" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">True Course (deg)</label>
+                                <input type="number" id="tc" value="90" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
+                            <div class="input-group">
+                                <label for="tas" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">True Airspeed (kts)</label>
+                                <input type="number" id="tas" value="120" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
+                            <div class="input-group">
+                                <label for="wd" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Wind Direction (deg)</label>
+                                <input type="number" id="wd" value="45" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
+                            <div class="input-group">
+                                <label for="ws" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Wind Speed (kts)</label>
+                                <input type="number" id="ws" value="20" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <label for="tas">True Airspeed (kts):</label>
-                            <input type="number" id="tas" value="120" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="wd">Wind Direction (deg):</label>
-                            <input type="number" id="wd" value="45" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="ws">Wind Speed (kts):</label>
-                            <input type="number" id="ws" value="20" required>
-                        </div>
-                        <button type="submit">Calculate</button>
+                        <button type="submit" class="w-full mt-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-lg transition uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate
+                        </button>
                     </form>
                 </div>
 
                 <!-- Compass -->
-                <div id="compass-section" class="scenario-section" style="display:none;">
-                    <h2>Compass & Heading</h2>
-                    <form id="compass-form">
+                <div id="compass-section" class="scenario-section hidden flex-1">
+                    <h2 class="text-xl font-bold text-white mb-4 font-mono border-b border-slate-700 pb-2">COMPASS & HEADING</h2>
+                    <form id="compass-form" class="space-y-4">
                         <div class="input-group">
-                            <label for="comp_th">True Heading (deg):</label>
-                            <input type="number" id="comp_th" value="90" required>
+                            <label for="comp_th" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">True Heading (deg)</label>
+                            <input type="number" id="comp_th" value="90" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
                         <div class="input-group">
-                            <label for="comp_var">Variation (West is +, East is -):</label>
-                            <input type="number" id="comp_var" value="5" required>
+                            <label for="comp_var" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Variation (+ West, - East)</label>
+                            <input type="number" id="comp_var" value="5" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
                         <div class="input-group">
-                            <label for="comp_dev">Deviation (West is +, East is -):</label>
-                            <input type="number" id="comp_dev" value="-2" required>
+                            <label for="comp_dev" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Deviation (+ West, - East)</label>
+                            <input type="number" id="comp_dev" value="-2" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
-                        <button type="submit">Calculate</button>
+                        <button type="submit" class="w-full mt-4 bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-4 rounded-lg transition uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate
+                        </button>
                     </form>
                 </div>
 
                 <!-- Distance -->
-                <div id="distance-section" class="scenario-section" style="display:none;">
-                    <h2>Distance & Track</h2>
-                    <form id="distance-form">
-                        <div class="input-group">
-                            <label>Point A (Lat, Lon):</label>
-                            <input type="number" step="any" id="lat1" value="51.4700" placeholder="Lat" required>
-                            <input type="number" step="any" id="lon1" value="-0.4543" placeholder="Lon" required>
+                <div id="distance-section" class="scenario-section hidden flex-1">
+                    <h2 class="text-xl font-bold text-white mb-4 font-mono border-b border-slate-700 pb-2">DISTANCE & TRACK</h2>
+                    <form id="distance-form" class="space-y-4">
+                        <div class="input-group grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Point A (Lat)</label>
+                                <input type="number" step="any" id="lat1" value="51.4700" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Point A (Lon)</label>
+                                <input type="number" step="any" id="lon1" value="-0.4543" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <label>Point B (Lat, Lon):</label>
-                            <input type="number" step="any" id="lat2" value="40.6413" placeholder="Lat" required>
-                            <input type="number" step="any" id="lon2" value="-73.7781" placeholder="Lon" required>
+                        <div class="input-group grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Point B (Lat)</label>
+                                <input type="number" step="any" id="lat2" value="40.6413" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Point B (Lon)</label>
+                                <input type="number" step="any" id="lon2" value="-73.7781" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
+                            </div>
                         </div>
-                        <button type="submit">Calculate</button>
+                        <button type="submit" class="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg transition uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate
+                        </button>
                     </form>
                 </div>
 
                 <!-- TSD -->
-                <div id="tsd-section" class="scenario-section" style="display:none;">
-                    <h2>Time, Speed, Distance</h2>
-                    <p><i>Leave one field blank to calculate it.</i></p>
-                    <form id="tsd-form">
+                <div id="tsd-section" class="scenario-section hidden flex-1">
+                    <h2 class="text-xl font-bold text-white mb-1 font-mono border-b border-slate-700 pb-2">TIME, SPEED, DISTANCE</h2>
+                    <p class="text-xs text-slate-400 mb-4 italic">Leave one field blank to calculate it.</p>
+                    <form id="tsd-form" class="space-y-4">
                         <div class="input-group">
-                            <label for="tsd_dist">Distance (NM):</label>
-                            <input type="number" step="any" id="tsd_dist" value="120">
+                            <label for="tsd_dist" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Distance (NM)</label>
+                            <input type="number" step="any" id="tsd_dist" value="120" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
                         <div class="input-group">
-                            <label for="tsd_spd">Speed (Kts):</label>
-                            <input type="number" step="any" id="tsd_spd" value="90">
+                            <label for="tsd_spd" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Speed (Kts)</label>
+                            <input type="number" step="any" id="tsd_spd" value="90" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
                         <div class="input-group">
-                            <label for="tsd_time">Time (Minutes):</label>
-                            <input type="number" step="any" id="tsd_time" placeholder="Leave blank">
+                            <label for="tsd_time" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Time (Minutes)</label>
+                            <input type="number" step="any" id="tsd_time" placeholder="Leave blank" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none placeholder-slate-600">
                         </div>
-                        <button type="submit">Calculate</button>
+                        <button type="submit" class="w-full mt-4 bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-lg transition uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate
+                        </button>
                     </form>
                 </div>
 
                 <!-- Altitude -->
-                <div id="altitude-section" class="scenario-section" style="display:none;">
-                    <h2>Altitude & Atmosphere</h2>
-                    <form id="altitude-form">
+                <div id="altitude-section" class="scenario-section hidden flex-1">
+                    <h2 class="text-xl font-bold text-white mb-4 font-mono border-b border-slate-700 pb-2">ALTITUDE & ATMOSPHERE</h2>
+                    <form id="altitude-form" class="space-y-4">
                         <div class="input-group">
-                            <label for="alt_ind">Indicated Altitude (ft):</label>
-                            <input type="number" step="any" id="alt_ind" value="5000" required>
+                            <label for="alt_ind" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Indicated Altitude (ft)</label>
+                            <input type="number" step="any" id="alt_ind" value="5000" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
                         <div class="input-group">
-                            <label for="alt_oat">OAT (Celsius):</label>
-                            <input type="number" step="any" id="alt_oat" value="10" required>
+                            <label for="alt_oat" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">OAT (Celsius)</label>
+                            <input type="number" step="any" id="alt_oat" value="10" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
-                        <button type="submit">Calculate</button>
+                        <button type="submit" class="w-full mt-4 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg transition uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate
+                        </button>
                     </form>
                 </div>
 
                 <!-- Radar -->
-                <div id="radar-section" class="scenario-section" style="display:none;">
-                    <h2>Primary Radar</h2>
-                    <form id="radar-form">
+                <div id="radar-section" class="scenario-section hidden flex-1">
+                    <h2 class="text-xl font-bold text-white mb-4 font-mono border-b border-slate-700 pb-2">PRIMARY RADAR</h2>
+                    <form id="radar-form" class="space-y-4">
                         <div class="input-group">
-                            <label for="radar_dist">Target Distance (NM):</label>
-                            <input type="number" step="any" id="radar_dist" value="25" required>
+                            <label for="radar_dist" class="block text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Target Distance (NM)</label>
+                            <input type="number" step="any" id="radar_dist" value="25" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono focus:border-cyan-500 focus:outline-none">
                         </div>
-                        <button type="submit">Calculate</button>
+                        <button type="submit" class="w-full mt-4 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg transition uppercase tracking-wider text-sm font-mono flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Calculate
+                        </button>
                     </form>
                 </div>
 
-                <div class="results" id="results">
-                    <!-- Results will be injected here -->
-                </div>
+                <!-- Results Output Box -->
+                <div id="results" class="mt-6"></div>
             </section>
             
-            <section class="visualization-panel">
-                <h2>Visualization</h2>
-                <div id="animation-container"></div>
+            <!-- Visualization Panel -->
+            <section class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col items-center">
+                <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-emerald-500 to-cyan-500"></div>
+                <h2 class="text-xl font-bold text-white mb-4 font-mono w-full border-b border-slate-700 pb-2 flex justify-between items-center">
+                    TACTICAL HUD
+                    <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded">LIVE FEED</span>
+                </h2>
+                
+                <div class="w-full flex-1 flex items-center justify-center bg-slate-950 rounded-xl border border-slate-800 relative overflow-hidden p-2" style="min-height: 400px;">
+                    <!-- Grid background overlay -->
+                    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(#06b6d4 1px, transparent 1px), linear-gradient(90deg, #06b6d4 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    <!-- p5 Canvas Container -->
+                    <div id="animation-container" class="relative z-10 rounded shadow-[0_0_15px_rgba(6,182,212,0.15)] flex justify-center items-center"></div>
+                </div>
             </section>
         </main>
     </div>

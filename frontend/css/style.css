@@ -1,67 +1,53 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #0b1120;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f6f9;
-    color: #333;
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.scenario-nav {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
-
-.nav-btn {
-    background: #e9ecef;
-    color: #333;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
+/* Nav Button Active State Customization */
 .nav-btn.active {
-    background: #007bff;
+    background: #1e293b; /* slate-800 */
+    border-color: #06b6d4; /* cyan-500 */
     color: #fff;
-    border-color: #007bff;
+    box-shadow: inset 4px 0 0 #06b6d4;
 }
 
+/* Formulas Display Box */
 .formula-block {
-    margin-top: 20px;
-    padding: 15px;
-    background: #fdfdfe;
-    border-left: 4px solid #007bff;
-    border-radius: 4px;
-    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 14px;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #0f172a; /* slate-900 */
+    border: 1px solid #1e293b; /* slate-800 */
+    border-left: 4px solid #06b6d4; /* cyan-500 */
+    border-radius: 0.5rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
 .formula-block h4 {
-    margin-bottom: 10px;
-    color: #007bff;
+    margin-bottom: 0.75rem;
+    color: #06b6d4;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
 }
 
 .formula-item {
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed #1e293b;
 }
 
 .formula-item:last-child {
@@ -71,81 +57,41 @@ header {
 }
 
 .formula-symbolic {
-    color: #666;
-    margin-bottom: 4px;
-    font-style: italic;
+    color: #94a3b8; /* slate-400 */
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
 }
 
 .formula-plugged {
-    color: #111;
+    color: #e2e8f0; /* slate-200 */
     font-weight: 600;
 }
 
-.dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-@media (min-width: 768px) {
-    .dashboard {
-        flex-direction: row;
-    }
-}
-
-.calculator-panel, .visualization-panel {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    flex: 1;
-}
-
-.input-group {
-    margin-bottom: 15px;
-}
-
-.input-group label {
+/* HUD Output Text Styles (used dynamically in main.js) */
+.hud-label {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+    margin-bottom: 0.25rem;
 }
-
-.input-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    background: #007bff;
+.hud-value {
     color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.125rem;
+    font-weight: 700;
 }
+.hud-val-accent { color: #06b6d4; }
+.hud-val-warn { color: #f59e0b; }
+.hud-val-success { color: #10b981; }
 
-button:hover {
-    background: #0056b3;
-}
-
-.results {
-    margin-top: 20px;
-    padding: 15px;
-    background: #e9ecef;
-    border-radius: 4px;
-}
-
-#animation-container {
-    width: 100%;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #eef;
-    border: 1px solid #cce;
-    border-radius: 4px;
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    background: #020617; /* slate-950 */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #1e293b;
 }

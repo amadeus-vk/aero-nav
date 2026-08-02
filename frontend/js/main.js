@@ -53,9 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             document.getElementById('results').innerHTML = `
-                <p><strong>True Heading:</strong> ${data.true_heading.toFixed(2)}°</p>
-                <p><strong>Ground Speed:</strong> ${data.ground_speed.toFixed(2)} kts</p>
-                <p><strong>WCA:</strong> ${data.wind_correction_angle.toFixed(2)}°</p>
+                <div class="results-grid">
+                    <div>
+                        <span class="hud-label">True Heading</span>
+                        <span class="hud-value hud-val-accent">${data.true_heading.toFixed(2)}°</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Ground Speed</span>
+                        <span class="hud-value hud-val-success">${data.ground_speed.toFixed(2)} kts</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Wind Corr Angle</span>
+                        <span class="hud-value hud-val-warn">${data.wind_correction_angle.toFixed(2)}°</span>
+                    </div>
+                </div>
                 ${renderFormulas(data.formulas)}
             `;
             
@@ -82,9 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             document.getElementById('results').innerHTML = `
-                <p><strong>True Heading:</strong> ${data.true_heading.toFixed(2)}°</p>
-                <p><strong>Magnetic Heading:</strong> ${data.magnetic_heading.toFixed(2)}°</p>
-                <p><strong>Compass Heading:</strong> ${data.compass_heading.toFixed(2)}°</p>
+                <div class="results-grid">
+                    <div>
+                        <span class="hud-label">True Heading</span>
+                        <span class="hud-value hud-val-accent">${data.true_heading.toFixed(2)}°</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Magnetic Heading</span>
+                        <span class="hud-value hud-val-warn">${data.magnetic_heading.toFixed(2)}°</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Compass Heading</span>
+                        <span class="hud-value hud-val-success">${data.compass_heading.toFixed(2)}°</span>
+                    </div>
+                </div>
                 ${renderFormulas(data.formulas)}
             `;
             
@@ -112,8 +134,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             document.getElementById('results').innerHTML = `
-                <p><strong>Distance:</strong> ${data.distance_nm.toFixed(2)} NM</p>
-                <p><strong>Initial True Track:</strong> ${data.true_track.toFixed(2)}°</p>
+                <div class="results-grid">
+                    <div>
+                        <span class="hud-label">Distance</span>
+                        <span class="hud-value hud-val-success">${data.distance_nm.toFixed(2)} NM</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Init True Track</span>
+                        <span class="hud-value hud-val-accent">${data.true_track.toFixed(2)}°</span>
+                    </div>
+                </div>
                 ${renderFormulas(data.formulas)}
             `;
             
@@ -143,9 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             document.getElementById('results').innerHTML = `
-                <p><strong>Distance:</strong> ${data.distance.toFixed(2)} NM</p>
-                <p><strong>Speed:</strong> ${data.speed.toFixed(2)} kts</p>
-                <p><strong>Time:</strong> ${data.time_min.toFixed(2)} mins</p>
+                <div class="results-grid">
+                    <div>
+                        <span class="hud-label">Distance</span>
+                        <span class="hud-value hud-val-accent">${data.distance.toFixed(2)} NM</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Speed</span>
+                        <span class="hud-value hud-val-success">${data.speed.toFixed(2)} kts</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">Time</span>
+                        <span class="hud-value hud-val-warn">${data.time_min.toFixed(2)} mins</span>
+                    </div>
+                </div>
                 ${renderFormulas(data.formulas)}
             `;
             
@@ -171,9 +212,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             document.getElementById('results').innerHTML = `
-                <p><strong>ISA Temp at Alt:</strong> ${data.isa_temp.toFixed(2)} °C</p>
-                <p><strong>ISA Deviation:</strong> ${data.isa_deviation.toFixed(2)} °C</p>
-                <p><strong>True Altitude:</strong> ${data.true_altitude.toFixed(0)} ft</p>
+                <div class="results-grid">
+                    <div>
+                        <span class="hud-label">ISA Temp</span>
+                        <span class="hud-value hud-val-accent">${data.isa_temp.toFixed(2)} °C</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">ISA Deviation</span>
+                        <span class="hud-value hud-val-warn">${data.isa_deviation.toFixed(2)} °C</span>
+                    </div>
+                    <div>
+                        <span class="hud-label">True Altitude</span>
+                        <span class="hud-value hud-val-success">${data.true_altitude.toFixed(0)} ft</span>
+                    </div>
+                </div>
                 ${renderFormulas(data.formulas)}
             `;
             
@@ -198,7 +250,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             document.getElementById('results').innerHTML = `
-                <p><strong>Round Trip Time:</strong> ${data.round_trip_time_us.toFixed(2)} μs</p>
+                <div class="results-grid">
+                    <div>
+                        <span class="hud-label">Round Trip Time</span>
+                        <span class="hud-value hud-val-accent">${data.round_trip_time_us.toFixed(2)} μs</span>
+                    </div>
+                </div>
                 ${renderFormulas(data.formulas)}
             `;
             
