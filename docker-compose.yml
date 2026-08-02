@@ -5,8 +5,5 @@ services:
     build: .
     ports:
       - "8087:8000"
-    volumes:
-      - ./backend:/app/backend
-      - ./frontend:/app/frontend
     environment:
       - ENV=development
