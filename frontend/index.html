@@ -13,30 +13,130 @@
         <header>
             <h1>Aero-Nav Interactive Calculator</h1>
             <p>Playful, animated aviation mathematics</p>
+            <nav class="scenario-nav">
+                <button class="nav-btn active" data-target="wind">Wind Triangle</button>
+                <button class="nav-btn" data-target="compass">Compass & Heading</button>
+                <button class="nav-btn" data-target="distance">Distance & Track</button>
+                <button class="nav-btn" data-target="tsd">Time, Speed, Distance</button>
+                <button class="nav-btn" data-target="altitude">Altitude & Atmosphere</button>
+                <button class="nav-btn" data-target="radar">Primary Radar</button>
+            </nav>
         </header>
         
         <main class="dashboard">
             <section class="calculator-panel">
-                <h2>Wind Triangle Calculator</h2>
-                <form id="wind-form">
-                    <div class="input-group">
-                        <label for="tc">True Course (deg):</label>
-                        <input type="number" id="tc" value="90" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="tas">True Airspeed (kts):</label>
-                        <input type="number" id="tas" value="120" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="wd">Wind Direction (deg):</label>
-                        <input type="number" id="wd" value="45" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="ws">Wind Speed (kts):</label>
-                        <input type="number" id="ws" value="20" required>
-                    </div>
-                    <button type="submit">Calculate</button>
-                </form>
+                
+                <!-- Wind Triangle -->
+                <div id="wind-section" class="scenario-section active">
+                    <h2>Wind Triangle Calculator</h2>
+                    <form id="wind-form">
+                        <div class="input-group">
+                            <label for="tc">True Course (deg):</label>
+                            <input type="number" id="tc" value="90" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="tas">True Airspeed (kts):</label>
+                            <input type="number" id="tas" value="120" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="wd">Wind Direction (deg):</label>
+                            <input type="number" id="wd" value="45" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="ws">Wind Speed (kts):</label>
+                            <input type="number" id="ws" value="20" required>
+                        </div>
+                        <button type="submit">Calculate</button>
+                    </form>
+                </div>
+
+                <!-- Compass -->
+                <div id="compass-section" class="scenario-section" style="display:none;">
+                    <h2>Compass & Heading</h2>
+                    <form id="compass-form">
+                        <div class="input-group">
+                            <label for="comp_th">True Heading (deg):</label>
+                            <input type="number" id="comp_th" value="90" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="comp_var">Variation (West is +, East is -):</label>
+                            <input type="number" id="comp_var" value="5" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="comp_dev">Deviation (West is +, East is -):</label>
+                            <input type="number" id="comp_dev" value="-2" required>
+                        </div>
+                        <button type="submit">Calculate</button>
+                    </form>
+                </div>
+
+                <!-- Distance -->
+                <div id="distance-section" class="scenario-section" style="display:none;">
+                    <h2>Distance & Track</h2>
+                    <form id="distance-form">
+                        <div class="input-group">
+                            <label>Point A (Lat, Lon):</label>
+                            <input type="number" step="any" id="lat1" value="51.4700" placeholder="Lat" required>
+                            <input type="number" step="any" id="lon1" value="-0.4543" placeholder="Lon" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Point B (Lat, Lon):</label>
+                            <input type="number" step="any" id="lat2" value="40.6413" placeholder="Lat" required>
+                            <input type="number" step="any" id="lon2" value="-73.7781" placeholder="Lon" required>
+                        </div>
+                        <button type="submit">Calculate</button>
+                    </form>
+                </div>
+
+                <!-- TSD -->
+                <div id="tsd-section" class="scenario-section" style="display:none;">
+                    <h2>Time, Speed, Distance</h2>
+                    <p><i>Leave one field blank to calculate it.</i></p>
+                    <form id="tsd-form">
+                        <div class="input-group">
+                            <label for="tsd_dist">Distance (NM):</label>
+                            <input type="number" step="any" id="tsd_dist" value="120">
+                        </div>
+                        <div class="input-group">
+                            <label for="tsd_spd">Speed (Kts):</label>
+                            <input type="number" step="any" id="tsd_spd" value="90">
+                        </div>
+                        <div class="input-group">
+                            <label for="tsd_time">Time (Minutes):</label>
+                            <input type="number" step="any" id="tsd_time" placeholder="Leave blank">
+                        </div>
+                        <button type="submit">Calculate</button>
+                    </form>
+                </div>
+
+                <!-- Altitude -->
+                <div id="altitude-section" class="scenario-section" style="display:none;">
+                    <h2>Altitude & Atmosphere</h2>
+                    <form id="altitude-form">
+                        <div class="input-group">
+                            <label for="alt_ind">Indicated Altitude (ft):</label>
+                            <input type="number" step="any" id="alt_ind" value="5000" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="alt_oat">OAT (Celsius):</label>
+                            <input type="number" step="any" id="alt_oat" value="10" required>
+                        </div>
+                        <button type="submit">Calculate</button>
+                    </form>
+                </div>
+
+                <!-- Radar -->
+                <div id="radar-section" class="scenario-section" style="display:none;">
+                    <h2>Primary Radar</h2>
+                    <form id="radar-form">
+                        <div class="input-group">
+                            <label for="radar_dist">Target Distance (NM):</label>
+                            <input type="number" step="any" id="radar_dist" value="25" required>
+                        </div>
+                        <button type="submit">Calculate</button>
+                    </form>
+                </div>
+
                 <div class="results" id="results">
                     <!-- Results will be injected here -->
                 </div>

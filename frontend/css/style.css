@@ -22,6 +22,27 @@ header {
     margin-bottom: 30px;
 }
 
+.scenario-nav {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.nav-btn {
+    background: #e9ecef;
+    color: #333;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.nav-btn.active {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
 .dashboard {
     display: flex;
     flex-direction: column;
