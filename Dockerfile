@@ -9,6 +9,9 @@ RUN pip install --no-cache-dir -r ./backend/requirements.txt
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
 
+# Force invalidate cache for assets
+RUN echo "Asset update $(date +%s)" > /tmp/cache_buster
+
 EXPOSE 8000
 
 ENV PYTHONPATH=/app
