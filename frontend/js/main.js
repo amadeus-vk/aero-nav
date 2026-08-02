@@ -35,6 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Map Layers
+    const updateLayers = () => {
+        simData.layers = {
+            bg: document.getElementById('layer-bg').checked,
+            grid: document.getElementById('layer-grid').checked,
+            nav: document.getElementById('layer-nav').checked,
+            terrain: document.getElementById('layer-terrain').checked
+        };
+    };
+    ['layer-bg', 'layer-grid', 'layer-nav', 'layer-terrain'].forEach(id => {
+        document.getElementById(id).addEventListener('change', updateLayers);
+    });
+    updateLayers();
+
     // Wind Form
     document.getElementById('wind-form').addEventListener('submit', async (e) => {
         e.preventDefault();

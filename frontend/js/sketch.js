@@ -14,16 +14,20 @@ export const simData = {
     alt: 0, true_alt: 0, isa_dev: 0,
     
     active: false,
-    frame: 0
+    frame: 0,
+    layers: { bg: true, grid: true, nav: true, terrain: true }
 };
 
 const sketch = (p) => {
+    let mapImg;
+
+    p.preload = () => {
+        mapImg = p.loadImage('/static/assets/map_bg.png');
+    };
+
     p.setup = () => {
-        let canvas = p.createCanvas(400, 400);
-        
-        // p5 sets display: block on canvas, but let's make sure it's sized correctly
+        let canvas = p.createCanvas(600, 400); // make wider for better map view
         let container = document.getElementById('animation-container');
-        // Clear anything else in container (if any)
         container.innerHTML = '';
         canvas.parent('animation-container');
         
@@ -32,9 +36,27 @@ const sketch = (p) => {
     };
 
     p.draw = () => {
-        p.clear(); // transparent background to let HUD grid shine through
+        p.clear();
         
         simData.frame++;
+        
+        p.push();
+        // Base Map Layers
+        if (simData.layers.bg && mapImg) {
+            p.push();
+            p.tint(16, 185, 129, 60); // tactical green/emerald tint
+            p.imageMode(p.CENTER);
+            p.translate(p.width/2, p.height/2);
+            // Slowly pan the map to simulate flight if active
+            let panX = simData.active ? (simData.frame * 0.2) % p.width : 0;
+            p.image(mapImg, -panX, 0, p.width * 1.5, p.height * 1.5);
+            p.pop();
+        }
+        
+        if (simData.layers.grid) drawLatLonGrid(p);
+        if (simData.layers.terrain) drawTerrain(p);
+        if (simData.layers.nav) drawNavAids(p);
+        p.pop();
         
         p.translate(p.width / 2, p.height / 2);
 
@@ -266,6 +288,94 @@ const sketch = (p) => {
         p.text("S", 0, 165);
         p.text("E", 165, 0);
         p.text("W", -165, 0);
+    }
+    
+    function drawLatLonGrid(p) {
+        p.stroke(6, 182, 212, 30); // very faint cyan
+        p.strokeWeight(1);
+        for(let x = 0; x < p.width; x += 50) {
+            p.line(x, 0, x, p.height);
+            p.fill(6, 182, 212, 50); p.noStroke(); p.textSize(8); p.textAlign(p.LEFT, p.TOP);
+            p.text(`115°${(x/50)+10}'W`, x + 2, 5);
+            p.stroke(6, 182, 212, 30);
+        }
+        for(let y = 0; y < p.height; y += 50) {
+            p.line(0, y, p.width, y);
+            p.fill(6, 182, 212, 50); p.noStroke(); p.textSize(8); p.textAlign(p.LEFT, p.BOTTOM);
+            p.text(`36°${(y/50)+20}'N`, 5, y - 2);
+            p.stroke(6, 182, 212, 30);
+        }
+    }
+
+    function drawTerrain(p) {
+        // Procedural terrain: mountains and rivers
+        p.push();
+        p.noFill();
+        // River
+        p.stroke(59, 130, 246, 100); // blue
+        p.strokeWeight(3);
+        p.beginShape();
+        for(let x=0; x<p.width; x+=20) {
+            p.vertex(x, p.height/2 + p.sin(x*2 + simData.frame*0.5)*50 + p.noise(x*0.05)*100);
+        }
+        p.endShape();
+        
+        // Mountain peaks
+        p.stroke(245, 158, 11, 80); // amber
+        p.strokeWeight(1);
+        p.fill(245, 158, 11, 20);
+        let peaks = [[100, 100], [450, 80], [150, 320], [500, 300]];
+        peaks.forEach(pt => {
+            p.triangle(pt[0], pt[1]-20, pt[0]-15, pt[1]+10, pt[0]+15, pt[1]+10);
+            p.fill(245, 158, 11, 60); p.noStroke(); p.textSize(8);
+            p.text("PEAK 12,400", pt[0]+10, pt[1]-10);
+            p.stroke(245, 158, 11, 80); p.fill(245, 158, 11, 20);
+        });
+        p.pop();
+    }
+
+    function drawNavAids(p) {
+        p.push();
+        // VORs
+        let vors = [
+            {x: 120, y: 200, name: "LAS"},
+            {x: 480, y: 150, name: "BTY"}
+        ];
+        p.stroke(236, 72, 153, 150); // magenta
+        p.strokeWeight(2);
+        vors.forEach(v => {
+            p.noFill();
+            p.hexagon(v.x, v.y, 12);
+            p.circle(v.x, v.y, 2);
+            p.fill(236, 72, 153); p.noStroke(); p.textSize(10);
+            p.text(v.name, v.x + 15, v.y + 4);
+            p.stroke(236, 72, 153, 150);
+        });
+        
+        // Airfields
+        let apts = [
+            {x: 250, y: 280, name: "KTNX", rwy: "14/32"},
+            {x: 400, y: 90,  name: "KLSV", rwy: "03/21"}
+        ];
+        p.stroke(6, 182, 212, 150); // cyan
+        apts.forEach(a => {
+            p.fill(6, 182, 212, 40);
+            p.circle(a.x, a.y, 14);
+            p.line(a.x-4, a.y-4, a.x+4, a.y+4); // fake rwy
+            p.fill(6, 182, 212); p.noStroke(); p.textSize(10);
+            p.text(a.name, a.x - 12, a.y - 10);
+            p.stroke(6, 182, 212, 150);
+        });
+        p.pop();
+    }
+    
+    // helper for VOR
+    p.hexagon = function(x, y, radius) {
+        p.beginShape();
+        for (let a = 0; a < 360; a += 60) {
+            p.vertex(x + p.cos(a) * radius, y + p.sin(a) * radius);
+        }
+        p.endShape(p.CLOSE);
     }
 
     function drawArrow(p, x1, y1, length) {
