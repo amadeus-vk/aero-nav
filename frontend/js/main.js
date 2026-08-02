@@ -1,6 +1,8 @@
-// main.js - Entry point for the frontend logic
+import { simData, initSketch } from './sketch.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    initSketch();
+    
     const form = document.getElementById('wind-form');
     
     form.addEventListener('submit', async (e) => {
@@ -33,8 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>WCA:</strong> ${data.wind_correction_angle.toFixed(2)}°</p>
             `;
             
-            // TODO: Dispatch custom event or call animation update function
-            // updateAnimation(data);
+            // Update animation data
+            simData.tc = tc;
+            simData.tas = tas;
+            simData.wd = wd;
+            simData.ws = ws;
+            simData.th = data.true_heading;
+            simData.gs = data.ground_speed;
+            simData.wca = data.wind_correction_angle;
+            simData.active = true;
             
         } catch (error) {
             console.error("Error calculating:", error);

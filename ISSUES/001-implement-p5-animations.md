@@ -1,5 +1,5 @@
 ---
-Status: Open
+Status: Resolved
 Type: Feature Request
 ---
 
@@ -12,7 +12,7 @@ The `start.txt` file specifies that the results of the wind triangle calculation
 - True Course (TC) plotted schematically.
 
 **Acceptance Criteria**
-- [ ] Connect the `p5.js` canvas in the frontend to the form submission.
-- [ ] Draw the True Course vector.
-- [ ] Draw the Wind vector.
-- [ ] Draw a simple plane graphic/polygon that rotates to match the True Heading returned by the FastAPI backend.
+- [x] Connect the `p5.js` canvas in the frontend to the form submission.
+- [x] Draw the True Course vector.
+- [x] Draw the Wind vector.
+- [x] Draw a simple plane graphic/polygon that rotates to match the True Heading returned by the FastAPI backend.
