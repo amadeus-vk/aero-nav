@@ -9,5 +9,5 @@ Type: Bug
 Failed to deploy the stack because `0.0.0.0:8000` is already allocated by another container (Portainer).
 
 **Resolution**
-Modified `docker-compose.yml` to map host port `8085` to container port `8000`.
-Updated `README.md` to reflect the new local access URL: `http://localhost:8085`.
+Modified `docker-compose.yml` to map host port `8087` to container port `8000`.
+Updated `README.md` to reflect the new local access URL: `http://localhost:8087`.
