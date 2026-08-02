@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aero-Nav Interactive Calculator</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Include p5.js for animations, Leaflet for maps if needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Aero-Nav Interactive Calculator</h1>
+            <p>Playful, animated aviation mathematics</p>
+        </header>
+        
+        <main class="dashboard">
+            <section class="calculator-panel">
+                <h2>Wind Triangle Calculator</h2>
+                <form id="wind-form">
+                    <div class="input-group">
+                        <label for="tc">True Course (deg):</label>
+                        <input type="number" id="tc" value="90" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="tas">True Airspeed (kts):</label>
+                        <input type="number" id="tas" value="120" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="wd">Wind Direction (deg):</label>
+                        <input type="number" id="wd" value="45" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="ws">Wind Speed (kts):</label>
+                        <input type="number" id="ws" value="20" required>
+                    </div>
+                    <button type="submit">Calculate</button>
+                </form>
+                <div class="results" id="results">
+                    <!-- Results will be injected here -->
+                </div>
+            </section>
+            
+            <section class="visualization-panel">
+                <h2>Visualization</h2>
+                <div id="animation-container"></div>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="/static/js/main.js"></script>
+</body>
+</html>
